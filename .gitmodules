@@ -1,3 +1,0 @@
-[submodule "source/p/jellyfish"]
-	path = source/p/jellyfish
-	url = git://github.com/arodic/jellyfish.git
