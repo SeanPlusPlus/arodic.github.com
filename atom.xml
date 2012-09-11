@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[My Octopress Blog]]></title>
+  <title><![CDATA[Aleksandar Rodic]]></title>
   <link href="http://arodic.github.com/atom.xml" rel="self"/>
   <link href="http://arodic.github.com/"/>
-  <updated>2012-09-10T23:16:12-07:00</updated>
+  <updated>2012-09-10T23:25:03-07:00</updated>
   <id>http://arodic.github.com/</id>
   <author>
-    <name><![CDATA[Your Name]]></name>
+    <name><![CDATA[Aleksandar Rodic]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
