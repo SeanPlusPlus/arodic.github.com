@@ -1,3 +1,9 @@
 [submodule "source/p/jellyfish"]
 	path = source/p/jellyfish
 	url = git://github.com/arodic/jellyfish.git
+[submodule "source/p/chrysaora"]
+	path = source/p/chrysaora
+	url = git://github.com/arodic/Chrysaora.git
+[submodule "source/p/mass"]
+	path = source/p/mass
+	url = git://github.com/arodic/mass64k.git
