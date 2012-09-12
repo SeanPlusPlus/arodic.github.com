@@ -53,6 +53,17 @@ task :generate do
   puts "## Generating Site with Jekyll"
   system "compass compile --css-dir #{source_dir}/stylesheets"
   system "jekyll"
+  Rake::Task[:copy_modules].execute
+end
+
+desc "Copies .gitmodules to public and corrects paths for deployment"
+task :copy_modules do
+  puts "Copying .gitmodules to public"
+  modules = File.open(".gitmodules",'r').read
+  modules = modules.gsub(source_dir+"/", "")
+  File.open(public_dir+'/.gitmodules', "w+") do |f|
+    f.write(modules)
+  end
 end
 
 desc "Watch the site and regenerate when it changes"
