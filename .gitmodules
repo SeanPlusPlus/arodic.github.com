@@ -7,3 +7,15 @@
 [submodule "p/mass"]
 	path = p/mass
 	url = git://github.com/arodic/mass64k.git
+[submodule "p/hackathon"]
+	path = p/hackathon
+	url = git://github.com/arodic/hackathon.git
+[submodule "p/nyc"]
+	path = p/nyc
+	url = git://github.com/arodic/nyc.git
+[submodule "p/snow"]
+	path = p/snow
+	url = git://github.com/arodic/snow.git
+[submodule "p/jellyfish_bkp"]
+	path = p/jellyfish_bkp
+	url = git://github.com/arodic/jellyfish_bkp.git
