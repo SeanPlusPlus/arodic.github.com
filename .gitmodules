@@ -19,3 +19,6 @@
 [submodule "p/jellyfish_bkp"]
 	path = p/jellyfish_bkp
 	url = git://github.com/arodic/jellyfish_bkp.git
+[submodule "renderman"]
+	path = renderman
+	url = git://github.com/arodic/renderman.git
