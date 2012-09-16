@@ -30,11 +30,9 @@ function drawScene() {
   delta = time - oldTime;
   oldTime = time;
   mProjection = M4x4.makePerspective(50, 1, near, far);
-  M4x4.makeTranslate3(20, 14, 0, mWorld);
+  M4x4.makeTranslate3(20, canvasMass.height/50, 0, mWorld);
   M4x4.scale(V3.$(.6, .6, .6), mWorld, mWorld);
   M4x4.makeTranslate3(0, 0, -80, mView);
-//  orbitY += (X - orbitY) / 10;
-//  orbitZ += (Y - orbitZ) / 10;
   M4x4.rotate(orbitY * 5, V3.$(0, 1, 0), mWorld, mWorld);
   M4x4.rotate(orbitZ * 5, V3.$(0, 0, 1), mWorld, mWorld);
   nlimit < nmass ? nlimit += 1 : null;
