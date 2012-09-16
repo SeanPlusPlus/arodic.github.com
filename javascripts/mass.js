@@ -1,23 +1,19 @@
-var massCanvasWidth;
-var massCanvasheight;
-
-var contentOffset = 1900;
 var canvasMass;
-
 var gl;
 
 var sLoc = [0,0,0,0,0,-1.0,0,0.894427359104,-0.44721314311,0.850650846958,0.276393681765,-0.447213202715,0.52573120594,-0.723606944084,-0.44721326232,-0.52573120594,-0.723606944084,-0.44721326232,-0.850650846958,0.276393681765,-0.447213202715,-0.52573120594,0.723606944084,0.44721326232,-0.850650846958,-0.276393681765,0.447213202715,0,-0.894427359104,0.44721314311,0.850650846958,-0.276393681765,0.447213202715,0.52573120594,0.723606944084,0.44721326232,0,0,1];
-var i,j,c,w,h,wd,hd,near,far,scale,cPrg,vSh,fSh;
-var rttColor,rttColorBuffer,rttColorTarget;
+var i,j,c,w,h,scale,cPrg,vSh,fSh;
 var mWorld,mView,mViewInv,mProjection,mWorldView,mWorldViewProj,mWorldInvTranspose;
 var aPos = {},aNrm = {},aCol = {},aTex = {},aNdx = {},sPrg = {},colors = [];
 var X = 0,Y = 0,orbitZ = 0,orbitY = 0;
 var delta, time, oldTime = new Date().getTime();
 var colorVar,dirVar;
+var near = 1;
+var far = 160;
 
 function drawScene() {
   if (mCount < massPolyCount && grow) {
-    mCount += 3 * 500;
+    mCount += 3 * 1000;
   }
   else if (mCount > 0 && !grow) {
     mCount -= 3 * 500;
@@ -30,56 +26,58 @@ function drawScene() {
   delta = time - oldTime;
   oldTime = time;
   mProjection = M4x4.makePerspective(50, 1, near, far);
-  M4x4.makeTranslate3(20, canvasMass.height/50, 0, mWorld);
+  M4x4.makeTranslate3(0, 0, 0, mWorld);
   M4x4.scale(V3.$(.6, .6, .6), mWorld, mWorld);
   M4x4.makeTranslate3(0, 0, -80, mView);
-  M4x4.rotate(orbitY * 5, V3.$(0, 1, 0), mWorld, mWorld);
-  M4x4.rotate(orbitZ * 5, V3.$(0, 0, 1), mWorld, mWorld);
+  M4x4.translate3(-30, 30, 0, mView, mView);
+  M4x4.rotate(orbitY * 5, V3.$(0, 1, 0), mView, mView);
+  M4x4.rotate(orbitZ * 5, V3.$(0, 0, 1), mView, mView);
+
   nlimit < nmass ? nlimit += 1 : null;
   render();
 }
+
 function render() {
-  gl.viewport(-wd, -hd, w + wd * 2, h + hd * 2);
   requestAnimationFrame(drawScene);
 
   sShd("vcolor");
-//gl.bindFramebuffer(gl.FRAMEBUFFER,rttColorTarget);
   gl.bindFramebuffer(gl.FRAMEBUFFER, null);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   for (i = 0; i < nmass; i++)drawMass('mass' + i);
 
-  orbitY += delta/200000;
-  orbitZ += delta/300000;
+  orbitY += delta/300000;
+  orbitZ += delta/200000;
 }
 
 window.onload = function() {
 
   canvasMass = document.createElement("canvas");
   document.body.appendChild(canvasMass);
-  window.addEventListener("onresize", resize, false);
+
+  //window.addEventListener("onresize", resize, false);
+
+  w = Math.min(window.innerWidth,1024);//window.innerWidth;
+  h = Math.min(window.innerWidth, 1024);//window.innerHeight;
+  canvasMass.width = w;
+  canvasMass.height = h;
+  canvasMass.id = 'canvas';
+  canvasMass.style.position = "fixed";
+  canvasMass.style.top = 0;
+  canvasMass.style.left = 0;
+  canvasMass.style.zIndex = 0;
 
   canvasMass.onmousedown = function(e) {
     grow = false;
   };
 
   gl = (function () {
-    var w = window;
-    canvasMass.id = 'canvas';
-    canvasMass.style.position = "fixed";
-    canvasMass.style.top = 0;
-    canvasMass.style.left = 0;
-    canvasMass.style.zIndex = 0;
 
-    var gl = canvasMass.getContext('experimental-webgl');
 
-    function resize() {
-      canvasMass.width = w.innerWidth;
-      canvasMass.height = w.innerHeight;
-      gl.viewport(0, 0, canvasMass.width, canvasMass.height);
-    }
 
-    resize();
-    w.addEventListener('resize', resize, false);
+    var gl = canvasMass.getContext('experimental-webgl', { antialias: false});
+
+
+    gl.viewport(0, 0, w, h);
 
     return gl;
   })();
@@ -88,23 +86,13 @@ window.onload = function() {
 
 };
 
-function resize() {
-  w = window.innerWidth;
-  h = window.innerHeight;
-  (w > h) ? hd = Math.floor((w - h) / 2) : hd = 0;
-  (h > w) ? wd = Math.floor((h - w) / 2) : wd = 0;
-  iCol();
-
-}
 
 
-near = 1;
-far = 160;
 initMass = function() {
   iShd();
   iBuf();
   iMat();
-  resize();
+  //resize();
   gl.clearColor(0, 0, 0, 0);
   gl.clearDepth(1);
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
@@ -115,18 +103,20 @@ initMass = function() {
 };
 var mass = {};
 var nmass = 5;
-var massLenght = 200;
+var massLenght = 2000;
 var massPolyCount = 0;
-var turnInterval = 7;
-var speed = 2.;
+var turnInterval = 10;
+var speed = 1;
 var grow = true;
 var nlimit = 0;
 var mCount = 0, mOffset = 0;
-var radius = 20;
+var radius = 50;
+var maxDistance = 90;
+
 function iBuf() {
   colorVar = Math.floor(Math.random() * 17);
   dirVar = Math.ceil(Math.random() * 6);
-  scale = 0.8;
+  scale = 0.7;
   //randMass();
   nlimit = 0,mCount = 0,mOffset = 0;
   for (i = 0; i < nmass; i++) {
@@ -157,7 +147,7 @@ function randColor() {
   colors[15] = new V3.$(rnd1 - 0.2 * rnd2, rnd1 * 0.5, rnd1 * 0.5);
   colors[16] = new V3.$(1, 1, 1);
   colors[17] = new V3.$(1, 1, 1);
-  return colors[colorVar];
+  return colors[1];
 }
 
 function rndDir(s, p) {
@@ -236,40 +226,41 @@ function generateMass() {
   color = randColor();
   position = V3.$(radius / 2 - Math.random() * radius, radius / 2 - Math.random() * radius, radius / 2 - Math.random() * radius);
   for (var i = 0; i < massLenght; i++) {
-    dir = rndDir(dirVar, position);
-    if (i % turnInterval == 0) direction = Math.floor(Math.random() * 5.99);
-    V3.add(position, V3.scale(dir[direction], speed), position);
-    for (var j = 0; j < sphere.vertexPositions.length; j = j + 3) {
-      m.vertexPositions.push(sphere.vertexPositions[j + 0] * scale + position[0]);
-      m.vertexPositions.push(sphere.vertexPositions[j + 1] * scale + position[1]);
-      m.vertexPositions.push(sphere.vertexPositions[j + 2] * scale + position[2]);
-      m.vertexNormals.push(sphere.vertexPositions[j + 0]);
-      m.vertexNormals.push(sphere.vertexPositions[j + 1]);
-      m.vertexNormals.push(sphere.vertexPositions[j + 2]);
-      m.vertexTextureCoords.push(sphere.vertexPositions[j + 0]);
-      m.vertexTextureCoords.push(sphere.vertexPositions[j + 1]);
-      m.vertexTextureCoords.push(sphere.vertexPositions[j + 2]);
-      m.vertexColors.push(color[0]);
-      m.vertexColors.push(color[1]);
-      m.vertexColors.push(color[2]);
-    }
-    for (j = 0; j < sphere.indices.length; j++) {
-      m.indices.push(sphere.indices[j] + ((sphere.vertexPositions.length / 3) * i));
-    }
-    massPolyCount = m.indices.length;
+
+      dir = rndDir(dirVar, position);
+      if (i % turnInterval == 0) direction = Math.floor(Math.random() * 5.99);
+
+      if (V3.length(position) > maxDistance){
+        position = V3.$(radius / 2 - Math.random() * radius, radius / 2 - Math.random() * radius, radius / 2 - Math.random() * radius);
+      }
+
+      V3.add(position, V3.scale(dir[direction], speed), position);
+      for (var j = 0; j < sphere.vertexPositions.length; j = j + 3) {
+        m.vertexPositions.push(sphere.vertexPositions[j + 0] * scale + position[0]);
+        m.vertexPositions.push(sphere.vertexPositions[j + 1] * scale + position[1]);
+        m.vertexPositions.push(sphere.vertexPositions[j + 2] * scale + position[2]);
+        m.vertexNormals.push(sphere.vertexPositions[j + 0]);
+        m.vertexNormals.push(sphere.vertexPositions[j + 1]);
+        m.vertexNormals.push(sphere.vertexPositions[j + 2]);
+        m.vertexTextureCoords.push(sphere.vertexPositions[j + 0]);
+        m.vertexTextureCoords.push(sphere.vertexPositions[j + 1]);
+        m.vertexTextureCoords.push(sphere.vertexPositions[j + 2]);
+        m.vertexColors.push(color[0]);
+        m.vertexColors.push(color[1]);
+        m.vertexColors.push(color[2]);
+      }
+      for (j = 0; j < sphere.indices.length; j++) {
+        m.indices.push(sphere.indices[j] + ((sphere.vertexPositions.length / 3) * i));
+      }
+
+      massPolyCount = m.indices.length;
+
   }
   return m;
 }
 var sphere = {
   "vertexPositions" : [0,0,-1,0,.894427359104,-.44721314311,.850650846958,.276393681765,-.447213202715,.52573120594,-.723606944084,-.44721326232,-.52573120594,-.723606944084,-.44721326232,-.850650846958,.276393681765,-.447213202715,-.52573120594,.723606944084,.44721326232,-.850650846958,-.276393681765,.447213202715,0,-.894427359104,.44721314311,.850650846958,-.276393681765,.447213202715,.52573120594,.723606944084,.44721326232,0,0,1],
   "indices" : [4,3,0,3,2,0,5,4,0,2,1,0,1,5,0,8,3,4,7,4,5,9,2,3,6,5,1,10,1,2,7,8,4,8,9,3,6,7,5,9,10,2,10,6,1,9,8,11,8,7,11,10,9,11,7,6,11,6,10,11]
-};
-var quad = {
-  "vertexPositions" : [-.5,-.5,0,.5,-.5,0,-.5,.5,0,.5,.5,0],
-  "vertexNormals" : [0,0,-1,0,0,-1,0,0,-1,0,0,-1],
-  "vertexColors" : [1,1,1,1,1,1,1,1,1,1,1,1],
-  "vertexTextureCoords" : [0,0,.5,1,0,.5,0,1,.5,1,1,.5],
-  "indices" : [0,1,3,0,3,2]
 };
 
 function drawMass(name) {
@@ -287,11 +278,6 @@ function drawMass(name) {
   }
 }
 
-function iCol() {
-  gl.bindTexture(gl.TEXTURE_2D, null);
-  gl.bindRenderbuffer(gl.RENDERBUFFER, null);
-  gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-}
 
 function iBuff(name, data) {
   aPos[name] = gl.createBuffer();
@@ -397,13 +383,6 @@ function bIndex(b, d) {
   b.numItems = d.length;
   return b;
 }
-if (!window.requestAnimationFrame) {
-  window.requestAnimationFrame = (function() {
-    return window.webkitRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(call) {
-      window.setTimeout(call, 1000 / 30);
-    };
-  })();
-}
 //SHADERS
 var sAttr = [
   "attribute vec3 aPos;",
@@ -441,19 +420,9 @@ var sVert = [
   "vNormal=(uWorldInvTranspose * vec4(aNrm, 1.0)).xyz;"
 ].join("\n");
 var vcolor_vs = [sAttr,sUnif,sVary,sMain,sVert,
-  "vec3 ambientCol=vec3(.5,.6,.65);",
-  "vec3 lightPos1=vec3(3.0,2.0,1.0);",
-  "vec3 lightCol1=vec3(.5,.2,.35);",
-  "vec3 lightDir1=normalize(lightPos1);",
-  "float diffuseProduct1=dot(normalize(vNormal.xyz), lightDir1);",
-  "vec3 lightPos2=vec3(0.,-1.,2.0);",
-  "vec3 lightCol2=vec3(.3,.4,.2);",
-  "vec3 lightDir2=normalize(lightPos2);",
-  "float diffuseProduct2=dot(normalize(vNormal.xyz), lightDir2);",
-  "vDiffuse=vec3(diffuseProduct1)*lightCol1 + vec3(diffuseProduct2)*lightCol2 + ambientCol;",
   "}"].join("\n");
 var vcolor_fs = [sHead,sVary,sMain,
-  "gl_FragColor=vec4(vDiffuse*vColor,1.0);",
+  "gl_FragColor=vec4(1.0,1.0,1.0,1.0);",
   "}"].join("\n");
 //MJS library 11,626 bytes // Copyright (c) 2010 Mozilla Corporation // Copyright (c) 2010 Vladimir Vukicevic
 const MJS_DO_ASSERT = true;
@@ -538,10 +507,12 @@ V3.normalize = function(a, r) {
   return r;
 };
 V3.scale = function(a, k, r) {
-  if (r == undefined)r = new T(3);
-  r[0] = a[0] * k;
-  r[1] = a[1] * k;
-  r[2] = a[2] * k;
+  if (r === undefined)r = new T(3);
+  if (a !== undefined){
+    r[0] = a[0] * k;
+    r[1] = a[1] * k;
+    r[2] = a[2] * k;
+  }
   return r;
 };
 V3.dot = function(a, b) {
