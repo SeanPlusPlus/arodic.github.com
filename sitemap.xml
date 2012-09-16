@@ -1,15 +1,19 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
+        <loc>http://arodic.github.com/blog/2012/09/15/settling-the-hub/</loc>
+        <lastmod>2012-09-15T19:21:42-07:00</lastmod>
+    </url>
+    <url>
         <loc>http://arodic.github.com/about/</loc>
-        <lastmod>2012-09-11T22:03:05-07:00</lastmod>
+        <lastmod>2012-09-15T18:51:43-07:00</lastmod>
     </url>
     <url>
         <loc>http://arodic.github.com/blog/archives/</loc>
-        <lastmod>2012-09-08T13:47:03-07:00</lastmod>
+        <lastmod>2012-09-15T19:16:50-07:00</lastmod>
     </url>
     <url>
         <loc>http://arodic.github.com/</loc>
-        <lastmod>2012-09-08T13:47:03-07:00</lastmod>
+        <lastmod>2012-09-15T19:16:50-07:00</lastmod>
     </url>
 </urlset>

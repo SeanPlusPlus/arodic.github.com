@@ -4,7 +4,7 @@
   <title><![CDATA[Aleksandar Rodic]]></title>
   <link href="http://arodic.github.com/atom.xml" rel="self"/>
   <link href="http://arodic.github.com/"/>
-  <updated>2012-09-15T18:13:38-07:00</updated>
+  <updated>2012-09-15T20:45:28-07:00</updated>
   <id>http://arodic.github.com/</id>
   <author>
     <name><![CDATA[Aleksandar Rodic]]></name>
@@ -12,5 +12,25 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Settling The Hub]]></title>
+    <link href="http://arodic.github.com/blog/2012/09/15/settling-the-hub/"/>
+    <updated>2012-09-15T18:54:00-07:00</updated>
+    <id>http://arodic.github.com/blog/2012/09/15/settling-the-hub</id>
+    <content type="html"><![CDATA[<p>I have been thinking about rebooting my website for a long time. So here it is! Fresh and transformed. I took out the garbage, transplanted some of the old projects and I&#8217;m starting over.</p>
+
+<p>Some of the biggest changes are:</p>
+
+<ul>
+<li>Format is changed to a blog. So far I haven&#8217;t been much of a blogger but hey&#8230; people change :)</li>
+<li>The website is no longer hosted on <a href="http://www.slicehost.com/">Slicehost</a> and it is moved to open-source hosting service provided by <a href="https://github.com/arodic/arodic.github.com">GitHub</a>.</li>
+<li>Static page generation is handled by <a href="http://octopress.org/">Octopress</a> and comments are powered by <a href="http://disqus.com/">Disqus</a></li>
+</ul>
+
+
+<p>I don&#8217;t have the project page yet, but most of my old projects are still there including the old <a href="p/jellyfish">WebGL Jellyfish</a> demo.</p>
+]]></content>
+  </entry>
   
 </feed>
